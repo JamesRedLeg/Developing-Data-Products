@@ -1,0 +1,84 @@
+---
+title: "My Kids' Grades Shiny App"
+author: "James C. Birk"
+date: "February 16, 2020"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Shiny App Project
+
+For the Developing Data Products final project, I created a Shiny App that displays my childrens' grades.
+
+All you need to do is put the grades into a csv.
+ Here's the code I used:
+
+```{r echo=TRUE}
+library(shiny)
+Grades <- read.csv("C:/Users/James/Documents/R/BirkGrades.csv")
+colnames(Grades)<-(c("Subject","Grade","Senior","Junior","7th Grade","6th Grade"))
+```
+That got the grades ready for display.
+
+Here's the original table
+```{r echo=FALSE}
+Grades
+```
+
+
+## Then I created a Shiny App
+
+```{r ShinyGrades, echo = TRUE}
+fluidPage(
+  # Application title
+  titlePanel("My Kids' Grades"),
+  checkboxGroupInput("variable", "By Category:",
+                     c("Overall" = "Grade",
+                       "Andy Results" = "Senior",
+                       "Vicki Results" = "Junior",
+                       "Matthew Results" = "7th Grade",
+                       "Steven Results" ="6th Grade")),
+  tableOutput("data")
+)
+```
+It's Easy to Use!
+
+-Make a selection
+
+-Compare any or all of the kids' grades to the average
+
+-Check out their total averages in the bottom row
+
+
+## What does the App Do and how does it work?
+The app uses radio button inputs to display columns of data from a .csv file.  It is very easy to use. 
+Here is the code from the server.R file
+```{r server, echo=TRUE}
+library(shiny)
+
+function(input, output, session) {
+  output$data <- renderTable({
+    Grades[, c("Subject", input$variable), drop = FALSE]
+  }, rownames = TRUE)
+}
+
+```
+
+
+
+
+
+
+
+
+
+## How do I get this Shiny App?
+
+
+
+
+
+My files for this app can be found on github under the username JamesRedLeg and the Developing Data Products Repo. 
